@@ -54,29 +54,12 @@ Slide decks (PDF + PPTX) live beside the web app. **Day 3 has slides only** — 
 
 ## 🚀 Run locally
 
-You need any static file server pointed at the `web/` folder.
-
-### Option A — `npx serve` (recommended)
-
 ```bash
 cd web
 npx serve .
 ```
 
 Open **http://localhost:3000** (port may vary — check the terminal output).
-
-### Option B — Python built-in server
-
-```bash
-cd web
-python3 -m http.server 8080
-```
-
-Open **http://localhost:8080**
-
-### Classroom display
-
-Press **F11** in the browser for fullscreen while teaching.
 
 ---
 
