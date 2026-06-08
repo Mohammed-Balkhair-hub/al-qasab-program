@@ -1,4 +1,4 @@
-# 📚 QASAB AI Program — Stage 2
+# 📚 Al-QASAB AI Program — Stage 2
 
 **Live site (GitHub Pages):**  
 https://mohammed-balkhair-hub.github.io/al-qasab-program/
