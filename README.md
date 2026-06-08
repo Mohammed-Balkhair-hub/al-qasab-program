@@ -1,7 +1,4 @@
-# 🎓 QASAB AI Program — Stage 2
-
-> Interactive Arabic (RTL) classroom demos for **Stage 2, Days 1–2**  
-> Static web app · HTML · CSS · JavaScript · Plotly.js · no backend required
+# 📚 QASAB AI Program — Stage 2
 
 **Live site (GitHub Pages):**  
 https://mohammed-balkhair-hub.github.io/al-qasab-program/
@@ -10,34 +7,14 @@ https://mohammed-balkhair-hub.github.io/al-qasab-program/
 
 ## 📋 Table of contents
 
-- [Overview](#-overview)
 - [Interactive pages](#-interactive-pages)
 - [Course days & materials](#-course-days--materials)
 - [Run locally](#-run-locally)
-- [Deploy to GitHub Pages](#-deploy-to-github-pages)
-- [Project structure](#-project-structure)
 - [Brand colors](#-brand-colors)
-- [Classroom tips](#-classroom-tips)
-
----
-
-## 🌟 Overview
-
-This repository contains classroom-ready demos for the **QASAB (القصب) AI Program — Stage 2**. The app is built for **1280×720 fullscreen projection** with native RTL layout and no scrollbars during demos.
-
-| | |
-|---|---|
-| **Language** | Arabic UI (RTL) |
-| **Stack** | Static HTML / CSS / ES modules |
-| **Charts** | Plotly.js (Day 1 only) |
-| **Deploy target** | GitHub Pages (`web/` folder) |
-| **Dependencies** | None for production — only a local static server for development |
 
 ---
 
 ## 🔗 Interactive pages
-
-After publishing, your live URLs will look like this:
 
 | Page | Title | Live link (GitHub Pages) | Repo file |
 |------|-------|--------------------------|-----------|
@@ -103,46 +80,6 @@ Press **F11** in the browser for fullscreen while teaching.
 
 ---
 
-## ☁️ Deploy to GitHub Pages
-
-1. Create a new repository on GitHub and push this project.
-2. In the repo go to **Settings → Pages → Build and deployment**.
-3. Set **Source** to **GitHub Actions** (not “Deploy from a branch”).
-4. Push to `main` or `master` — the workflow in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) publishes the `web/` folder automatically.
-5. Your site will be live at:
-
-   **https://mohammed-balkhair-hub.github.io/al-qasab-program/**
-
-No build step, API keys, or server-side code are required.
-
----
-
-## 📁 Project structure
-
-```
-stage-2/
-├── web/                         # 🌐 Static app — deployed to GitHub Pages
-│   ├── index.html               # Hub (Days 1 & 2)
-│   ├── day-1.html               # Day 1 interactive demos
-│   ├── day-2.html               # Day 2 interactive demos
-│   ├── css/qasab.css            # QASAB theme, RTL layout, hub background
-│   └── js/
-│       ├── day1.js              # Pixels, features, weight tuning
-│       ├── day2.js              # Neuron + network animations
-│       ├── day2-examples.js     # Preset neuron/network examples
-│       ├── plots.js             # Plotly charts (Day 1)
-│       ├── image-utils.js       # Image → pixel grid helpers
-│       └── theme.js             # Colors & chart defaults
-├── Day-1/ … Day-3/              # 📄 Course slide PDFs & assets
-├── AI_Program_Stage2.xlsx       # Curriculum spreadsheet
-├── .github/workflows/deploy.yml # GitHub Pages CI
-└── README.md
-```
-
-Folders not tracked in Git: `ignore/` (local only), `.venv/` (optional local Python env).
-
----
-
 ## 🎨 Brand colors
 
 | Role | Hex | Preview |
@@ -152,15 +89,6 @@ Folders not tracked in Git: `ignore/` (local only), `.venv/` (optional local Pyt
 | QASAB Orange | `#F58220` | Accents, secondary highlights |
 
 Typography: **Noto Sans Arabic** (loaded from Google Fonts).
-
----
-
-## 💡 Classroom tips
-
-- Start from the **hub** ([`web/index.html`](web/index.html)) and pick the day card.
-- Day 1 works best with two contrasting images (e.g. bright vs. dark, round vs. elongated).
-- Day 2 tab 1 explains one neuron before tab 2 shows the full connected network.
-- Remaining lesson content is in the PDF slides inside each `Day-*` folder.
 
 ---
 
