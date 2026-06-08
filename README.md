@@ -3,9 +3,8 @@
 > Interactive Arabic (RTL) classroom demos for **Stage 2, Days 1–2**  
 > Static web app · HTML · CSS · JavaScript · Plotly.js · no backend required
 
-**Live site (after GitHub Pages deploy):**  
-`https://YOUR_USERNAME.github.io/YOUR_REPO/`  
-Replace `YOUR_USERNAME` and `YOUR_REPO` with your GitHub account and repository name.
+**Live site (GitHub Pages):**  
+https://mohammed-balkhair-hub.github.io/al-qasab-program/
 
 ---
 
@@ -42,9 +41,9 @@ After publishing, your live URLs will look like this:
 
 | Page | Title | Live link (GitHub Pages) | Repo file |
 |------|-------|--------------------------|-----------|
-| 🏠 **Hub** | Program home — pick a day | `https://YOUR_USERNAME.github.io/YOUR_REPO/` | [`web/index.html`](web/index.html) |
-| 📐 **Day 1** | Pattern Engineering | `https://YOUR_USERNAME.github.io/YOUR_REPO/day-1.html` | [`web/day-1.html`](web/day-1.html) |
-| 🧠 **Day 2** | Built on Our Images | `https://YOUR_USERNAME.github.io/YOUR_REPO/day-2.html` | [`web/day-2.html`](web/day-2.html) |
+| 🏠 **Hub** | Program home — pick a day | [Open hub](https://mohammed-balkhair-hub.github.io/al-qasab-program/) | [`web/index.html`](web/index.html) |
+| 📐 **Day 1** | Pattern Engineering | [Open Day 1](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-1.html) | [`web/day-1.html`](web/day-1.html) |
+| 🧠 **Day 2** | Built on Our Images | [Open Day 2](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-2.html) | [`web/day-2.html`](web/day-2.html) |
 
 ### Day 1 demos — *Pattern Engineering*
 
@@ -112,9 +111,7 @@ Press **F11** in the browser for fullscreen while teaching.
 4. Push to `main` or `master` — the workflow in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) publishes the `web/` folder automatically.
 5. Your site will be live at:
 
-   ```
-   https://YOUR_USERNAME.github.io/YOUR_REPO/
-   ```
+   **https://mohammed-balkhair-hub.github.io/al-qasab-program/**
 
 No build step, API keys, or server-side code are required.
 
