@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اليوم ١ — هندسة الأنماط | برنامج القصب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/qasab.css" />
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <nav class="nav">
+      <a class="nav-back" href="index.html">← الرئيسية</a>
+      <div class="brand-mark" aria-hidden="true"><span class="brand-mark-inner">Q</span></div>
+      <span class="nav-day">اليوم ١</span>
+      <h1>هندسة الأنماط</h1>
+      <ul class="nav-tabs" id="nav-tabs">
+        <li><button type="button" class="active" data-demo="pixels">١ — بكسلات وخصائص</button></li>
+        <li><button type="button" data-demo="weights">٢ — ضبط الأوزان</button></li>
+      </ul>
+    </nav>
+    <div class="content">
+      <div class="header" id="demo-header">
+        <h2 id="demo-title">من صورتين إلى بكسلات وخصائص</h2>
+        <p id="demo-desc">ارفع صورتين مع تصنيف كل واحدة — شبكة 32×32 — ثم شغّل استخراج الخصائص.</p>
+      </div>
+      <div class="main">
+        <div class="charts" id="charts-area"></div>
+        <div class="controls" id="controls-area"></div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="js/day1.js"></script>
+</body>
+</html>
