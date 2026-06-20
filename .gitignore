@@ -1,2 +1,6 @@
 ignore/
 .DS_Store
+.venv/
+__pycache__/
+*.pyc
+slides/templates/pandoc-default.pptx

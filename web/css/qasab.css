@@ -832,7 +832,7 @@ body.hub-page {
   background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
 }
 
-.day-card--2::before {
+.day-card--3::before {
   background: linear-gradient(90deg, var(--primary-light) 0%, var(--accent) 100%);
 }
 

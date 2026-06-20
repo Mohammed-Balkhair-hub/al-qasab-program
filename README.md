@@ -20,7 +20,9 @@ https://mohammed-balkhair-hub.github.io/al-qasab-program/
 |------|-------|--------------------------|-----------|
 | 🏠 **Hub** | Program home — pick a day | [Open hub](https://mohammed-balkhair-hub.github.io/al-qasab-program/) | [`web/index.html`](web/index.html) |
 | 📐 **Day 1** | Pattern Engineering | [Open Day 1](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-1.html) | [`web/day-1.html`](web/day-1.html) |
-| 🧠 **Day 2** | Built on Our Images | [Open Day 2](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-2.html) | [`web/day-2.html`](web/day-2.html) |
+| 🧠 **Day 3** | Built on Our Images | [Open Day 3](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-3.html) | [`web/day-3.html`](web/day-3.html) |
+
+> **Web days 1 and 3 only.** Day 2 and Day 4 have slide decks but no interactive pages in this release.
 
 ### Day 1 demos — *Pattern Engineering*
 
@@ -29,7 +31,7 @@ https://mohammed-balkhair-hub.github.io/al-qasab-program/
 | **1 — Pixels & features** | Upload two labeled images → 32×32 pixel grid → animated feature extraction |
 | **2 — Weight tuning** | 2D scatter plot with decision boundary — adjust weights until classes separate |
 
-### Day 2 demos — *Built on Our Images*
+### Day 3 demos — *Built on Our Images*
 
 | Tab | What students see |
 |-----|-------------------|
@@ -40,15 +42,16 @@ https://mohammed-balkhair-hub.github.io/al-qasab-program/
 
 ## 📚 Course days & materials
 
-Slide decks (PDF + PPTX) live beside the web app. **Day 3 has slides only** — no interactive page in this release.
+Slide decks (PDF + PPTX) live beside the web app in `Day-N/` folders.
 
-| Day | Topic (Arabic) | Interactive web | PDF slides |
-|-----|----------------|-----------------|------------|
-| **1** | Pattern Engineering | ✅ 2 demos | PDF & PPTX in [`Day-1/`](Day-1/) |
-| **2** | Built on Our Images (مبني على صورتنا) | ✅ 2 demos | PDF & PPTX in [`Day-2/`](Day-2/) |
-| **3** | Where AI Falls Short (حيث يقصر الذكاء الاصطناعي) | — slides only | PDF & PPTX in [`Day-3/`](Day-3/) |
+| Day | Topic (Arabic) | Interactive web | Slides |
+|-----|----------------|-----------------|--------|
+| **1** | Pattern Engineering (هندسة الأنماط) | ✅ 2 demos | [`Day-1/`](Day-1/) |
+| **2** | Learning Cycle (دائرة التعلم) | — | [`Day-2/`](Day-2/) |
+| **3** | Built on Our Images (مبني على صورتنا) | ✅ 2 demos | [`Day-3/`](Day-3/) |
+| **4** | — | — slides only, no web | (future) |
 
-> PDF filenames use Arabic characters. Open them from the `Day-1/`, `Day-2/`, and `Day-3/` folders in your file browser or IDE.
+> PDF filenames use Arabic characters. Open them from the `Day-N/` folders in your file browser or IDE.
 
 ---
 
