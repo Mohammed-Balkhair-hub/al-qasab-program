@@ -1,6 +1,14 @@
 import { renderPlotInBox, setMetrics, infoHtml } from "./theme.js";
 import { featureScatterWithBoundary, fixedFeatureAxes } from "./plots.js";
 import {
+  createLinePlayState,
+  renderLinePlayPlot,
+  formulaText as lineFormula,
+  addFeature,
+  removeLastFeature,
+  pointTouched,
+} from "./lineplay.js";
+import {
   loadImageFromFile,
   drawToCanvases,
   computeFeatures,
@@ -17,7 +25,9 @@ function emptySample(slot, label, labelName) {
 }
 
 const state = {
-  demo: "pixels",
+  demo: "lineplay",
+  imagesStep: "pixels",
+  linePlay: createLinePlayState(),
   samples: [
     emptySample(0, 1, "صنف أ"),
     emptySample(1, 0, "صنف ب"),
@@ -26,7 +36,7 @@ const state = {
   featStep: 0,
   animTimer: null,
   wVals: [0.4, 0.4, 0.2],
-  threshold: 0.5,
+  bias: -0.5,
   plotAxes: null,
 };
 
@@ -37,11 +47,17 @@ function readySamples() {
 function scoreSample2D(sample) {
   const [w1, w2] = state.wVals;
   const f = sample.features;
-  return w1 * f.brightness + w2 * f.aspect;
+  return w1 * f.brightness + w2 * f.aspect + state.bias;
 }
 
 function predictSample(sample) {
-  return scoreSample2D(sample) >= state.threshold ? 1 : 0;
+  return scoreSample2D(sample) >= 0 ? 1 : 0;
+}
+
+function weightsFormulaText() {
+  const b = state.bias;
+  const bPart = b >= 0 ? ` + ${b.toFixed(2)}` : ` − ${Math.abs(b).toFixed(2)}`;
+  return `y = w₁·سطوع + w₂·شكل${bPart}`;
 }
 
 function featureDiffs(pos, neg) {
@@ -70,13 +86,13 @@ function computeSuggestedWeights(pos, neg) {
   const w2d = [+(norm2d[0] / mag2).toFixed(2), +(norm2d[1] / mag2).toFixed(2)];
   const scorePos = w2d[0] * pos.features.brightness + w2d[1] * pos.features.aspect;
   const scoreNeg = w2d[0] * neg.features.brightness + w2d[1] * neg.features.aspect;
-  const threshold = +((scorePos + scoreNeg) / 2).toFixed(2);
-  return { weights: [...w2d, state.wVals[2]], threshold, diffs };
+  const bias = +(-(scorePos + scoreNeg) / 2).toFixed(2);
+  return { weights: [...w2d, state.wVals[2]], bias, diffs };
 }
 
 function weightHints(samples) {
   if (samples.length < 2) {
-    return "ارفع صورتين في العرض ١ أولاً — ستظهر خصائصهما هنا.";
+    return "ارفع صورتين في التجربة ٢ (رفع واستخراج) أولاً — ستظهر خصائصهما هنا.";
   }
   if (samples[0].label === samples[1].label) {
     return "⚠️ عيّن تصنيفين مختلفين — صورة واحدة «صنف أ» والأخرى «صنف ب».";
@@ -84,7 +100,7 @@ function weightHints(samples) {
 
   const pos = samples.find((s) => s.label === 1);
   const neg = samples.find((s) => s.label === 0);
-  const { weights: idealW, threshold: idealT, diffs } = computeSuggestedWeights(pos, neg);
+  const { weights: idealW, bias: idealB, diffs } = computeSuggestedWeights(pos, neg);
   const diffs2d = diffs.filter((d) => d.idx < 2);
   const best = diffs2d[0] || diffs[0];
   const second = diffs2d[1] || diffs[1];
@@ -95,10 +111,10 @@ function weightHints(samples) {
   }
 
   const target = wrong[0];
-  const targetScore = scoreSample2D(target);
+  const targetY = scoreSample2D(target);
   const need = target.label === 1
-    ? state.threshold - targetScore + 0.02
-    : targetScore - state.threshold + 0.02;
+    ? -targetY + 0.02
+    : targetY + 0.02;
 
   const helpful = diffs2d.find((d) =>
     target.label === 1 ? d.diff > 0.02 : d.diff < -0.02
@@ -111,12 +127,12 @@ function weightHints(samples) {
     ? Math.min(1, state.wVals[wIdx] + deltaW)
     : Math.max(-1, state.wVals[wIdx] - deltaW);
 
-  const scorePosNow = scoreSample2D(pos);
-  const scoreNegNow = scoreSample2D(neg);
-  const midThreshold = +((scorePosNow + scoreNegNow) / 2).toFixed(2);
+  const rawPos = state.wVals[0] * pos.features.brightness + state.wVals[1] * pos.features.aspect;
+  const rawNeg = state.wVals[0] * neg.features.brightness + state.wVals[1] * neg.features.aspect;
+  const midBias = +(-(rawPos + rawNeg) / 2).toFixed(2);
 
   const steps = [
-    `<strong>الخطوة ١ — المشكلة:</strong> <strong>${target.labelName}</strong> مصنّفة خطأ. مجموعها <strong>${targetScore.toFixed(2)}</strong> لكن المطلوب ${target.label === 1 ? `≥ ${state.threshold.toFixed(2)}` : `< ${state.threshold.toFixed(2)}`}.`,
+    `<strong>الخطوة ١ — المشكلة:</strong> <strong>${target.labelName}</strong> مصنّفة خطأ. قيمة y = <strong>${targetY.toFixed(2)}</strong> لكن المطلوب ${target.label === 1 ? "y ≥ 0" : "y < 0"}.`,
     `<strong>الخطوة ٢ — قارن:</strong> ${pos.labelName} (${helpful.name}=${helpful.pos}) مقابل ${neg.labelName} (${helpful.name}=${helpful.neg}). الفرق = <strong>${helpful.diff.toFixed(2)}</strong>.`,
     `<strong>الخطوة ٣ — عدّل ${helpful.weight}:</strong> ${target.label === 1 ? "ارفع" : "خفّض"} <strong>${helpful.weight}</strong> (${helpful.name}) من <strong>${state.wVals[wIdx].toFixed(2)}</strong> إلى حوالي <strong>${newW.toFixed(2)}</strong>.`,
   ];
@@ -128,11 +144,11 @@ function weightHints(samples) {
   }
 
   steps.push(
-    `<strong>الخطوة ${steps.length} — العتبة:</strong> ضعها بين مجموع الصورتين ≈ <strong>${midThreshold}</strong> (أو جرّب <strong>${idealT}</strong> كحل جاهز).`
+    `<strong>الخطوة ${steps.length} — b:</strong> اضبط الانحياز b بين y للصورتين ≈ <strong>${midBias}</strong> (أو جرّب <strong>${idealB}</strong> كحل جاهز).`
   );
 
   steps.push(
-    `<strong>💡 حل مقترح:</strong> w₁=${idealW[0]} · w₂=${idealW[1]} · عتبة=${idealT} — إذا النقطتان في المنطقتين الصحيحتين، انتهيت!`
+    `<strong>💡 حل مقترح:</strong> w₁=${idealW[0]} · w₂=${idealW[1]} · b=${idealB} — صنف أ حيث y ≥ 0`
   );
 
   return steps.join("<br>");
@@ -147,13 +163,194 @@ function sliderRow(id, label, min, max, step, value) {
     </label>`;
 }
 
+/* ── ١ خط وأوزان (تجربة تفاعلية) ── */
+let linePlayRaf = null;
+
+function scheduleLinePlayUpdate() {
+  if (linePlayRaf) return;
+  linePlayRaf = requestAnimationFrame(() => {
+    linePlayRaf = null;
+    updateLinePlayUI();
+  });
+}
+
+function updateLinePlayUI() {
+  const lp = state.linePlay;
+  renderLinePlayPlot("chart-lineplay", lp, scheduleLinePlayUpdate);
+
+  const formulaEl = document.getElementById("line-formula");
+  if (formulaEl) formulaEl.textContent = lineFormula(lp);
+
+  const touched = lp.points.filter((p) => pointTouched(lp, p)).length;
+  const metricsEl = document.getElementById("line-metrics");
+  if (metricsEl) {
+    setMetrics(metricsEl, [
+      ["الميزات x", String(lp.nFeatures)],
+      ["النقاط", String(lp.points.length)],
+      ["على الخط", String(touched)],
+      ["ε", lp.touchEps.toFixed(2)],
+    ]);
+  }
+
+  for (let i = 0; i < lp.nFeatures; i++) {
+    const out = document.getElementById(`lw${i + 1}-val`);
+    if (out) out.textContent = lp.weights[i].toFixed(2);
+  }
+  for (let i = 0; i < lp.globals.length; i++) {
+    const out = document.getElementById(`lx${i + 3}-val`);
+    if (out) out.textContent = lp.globals[i].toFixed(2);
+  }
+  const tOut = document.getElementById("line-bias-val");
+  if (tOut) tOut.textContent = lp.bias.toFixed(2);
+  const epsOut = document.getElementById("line-eps-val");
+  if (epsOut) epsOut.textContent = lp.touchEps.toFixed(2);
+}
+
+function renderLinePlay() {
+  document.getElementById("demo-title").textContent = "خط القرار — y = w·x + b";
+  document.getElementById("demo-desc").textContent =
+    "ميزة واحدة: y = w·x + b — خط مائل مثل R. ميزتان فأكثر: w₁·x₁ + w₂·x₂ + b = 0. اضغط داخل الرسم الأبيض لإضافة نقاط زرقاء.";
+
+  const lp = state.linePlay;
+  const mounted = document.getElementById("chart-lineplay");
+
+  if (!mounted) {
+    document.getElementById("charts-area").innerHTML = `
+      <div class="chart-box weights-scatter" id="chart-lineplay"></div>
+    `;
+
+    let weightSliders = "";
+    for (let i = 0; i < lp.nFeatures; i++) {
+      weightSliders += sliderRow(`lw${i + 1}`, `w${i + 1}`, -1, 1, 0.01, lp.weights[i]);
+    }
+
+    let globalSliders = "";
+    for (let i = 0; i < lp.globals.length; i++) {
+      globalSliders += sliderRow(`lx${i + 3}`, `x${i + 3} (ثابت)`, 0, 1, 0.01, lp.globals[i]);
+    }
+
+    document.getElementById("controls-area").innerHTML = `
+      <div class="control-group">
+        <h3>الميزات x والأوزان w</h3>
+        <p class="hint-inline">عدد w = عدد x — ${lp.nFeatures} ميزة حالياً</p>
+        <div id="line-weight-sliders">${weightSliders}</div>
+        <div id="line-global-sliders">${globalSliders}</div>
+        ${sliderRow("line-bias", "b (الانحياز)", -1.5, 1.5, 0.01, lp.bias)}
+        ${sliderRow("line-eps", "ε (مسافة القرب)", 0.005, 0.15, 0.005, lp.touchEps)}
+        <div class="btn-row">
+          <button class="btn btn-secondary" id="btn-add-x">+ إضافة x</button>
+          <button class="btn btn-secondary" id="btn-remove-x">− حذف x</button>
+          <button class="btn btn-secondary" id="btn-clear-pts">مسح النقاط</button>
+        </div>
+      </div>
+      <div class="formula" style="direction:rtl" id="line-formula"></div>
+      <div class="metrics" id="line-metrics"></div>
+      ${infoHtml("🟢 المنطقة الخضراء = ε — النقطة تتحول لأخضر داخلها · 🟠 الخط البرتقالي", "info")}
+    `;
+
+    bindLinePlayControls();
+  } else {
+    rebuildLinePlaySliders();
+  }
+
+  updateLinePlayUI();
+  requestAnimationFrame(() => requestAnimationFrame(() => updateLinePlayUI()));
+}
+
+function rebuildLinePlaySliders() {
+  const lp = state.linePlay;
+  const wWrap = document.getElementById("line-weight-sliders");
+  const gWrap = document.getElementById("line-global-sliders");
+  const hint = document.querySelector(".hint-inline");
+  if (hint) hint.textContent = `عدد w = عدد x — ${lp.nFeatures} ميزة حالياً`;
+
+  if (wWrap) {
+    wWrap.innerHTML = "";
+    for (let i = 0; i < lp.nFeatures; i++) {
+      wWrap.insertAdjacentHTML("beforeend", sliderRow(`lw${i + 1}`, `w${i + 1}`, -1, 1, 0.01, lp.weights[i]));
+    }
+  }
+  if (gWrap) {
+    gWrap.innerHTML = "";
+    for (let i = 0; i < lp.globals.length; i++) {
+      gWrap.insertAdjacentHTML("beforeend", sliderRow(`lx${i + 3}`, `x${i + 3} (ثابت)`, 0, 1, 0.01, lp.globals[i]));
+    }
+  }
+  bindLinePlaySliders();
+}
+
+function bindLinePlaySliders() {
+  const lp = state.linePlay;
+  const wWrap = document.getElementById("line-weight-sliders");
+  const gWrap = document.getElementById("line-global-sliders");
+
+  if (wWrap && !wWrap.dataset.bound) {
+    wWrap.dataset.bound = "1";
+    wWrap.addEventListener("input", (e) => {
+      const m = e.target.id?.match(/^lw(\d+)$/);
+      if (!m) return;
+      lp.weights[parseInt(m[1], 10) - 1] = parseFloat(e.target.value);
+      scheduleLinePlayUpdate();
+    });
+  }
+
+  if (gWrap && !gWrap.dataset.bound) {
+    gWrap.dataset.bound = "1";
+    gWrap.addEventListener("input", (e) => {
+      const m = e.target.id?.match(/^lx(\d+)$/);
+      if (!m) return;
+      lp.globals[parseInt(m[1], 10) - 3] = parseFloat(e.target.value);
+      scheduleLinePlayUpdate();
+    });
+  }
+
+  const th = document.getElementById("line-bias");
+  if (th && !th.dataset.bound) {
+    th.dataset.bound = "1";
+    th.addEventListener("input", (e) => {
+      lp.bias = parseFloat(e.target.value);
+      scheduleLinePlayUpdate();
+    });
+  }
+
+  const eps = document.getElementById("line-eps");
+  if (eps && !eps.dataset.bound) {
+    eps.dataset.bound = "1";
+    eps.addEventListener("input", (e) => {
+      lp.touchEps = parseFloat(e.target.value);
+      scheduleLinePlayUpdate();
+    });
+  }
+}
+
+function bindLinePlayControls() {
+  bindLinePlaySliders();
+
+  document.getElementById("btn-add-x").addEventListener("click", () => {
+    addFeature(state.linePlay);
+    rebuildLinePlaySliders();
+    scheduleLinePlayUpdate();
+  });
+
+  document.getElementById("btn-remove-x").addEventListener("click", () => {
+    removeLastFeature(state.linePlay);
+    rebuildLinePlaySliders();
+    scheduleLinePlayUpdate();
+  });
+
+  document.getElementById("btn-clear-pts").addEventListener("click", () => {
+    state.linePlay.points = [];
+    scheduleLinePlayUpdate();
+  });
+}
+
 function updateSliderOutputs() {
   const w1El = document.getElementById("w1-val");
   const w2El = document.getElementById("w2-val");
-  const tEl = document.getElementById("threshold-val");
+  const bEl = document.getElementById("img-bias-val");
   if (w1El) w1El.textContent = state.wVals[0].toFixed(2);
   if (w2El) w2El.textContent = state.wVals[1].toFixed(2);
-  if (tEl) tEl.textContent = state.threshold.toFixed(2);
+  if (bEl) bEl.textContent = state.bias.toFixed(2);
 }
 
 /* ── ١ بكسلات وخصائص ── */
@@ -356,14 +553,14 @@ function updateWeightsUI() {
 
   const formulaEl = document.getElementById("formula-text");
   if (formulaEl) {
-    formulaEl.textContent = `Σ = w₁·سطوع + w₂·شكل ≥ ${state.threshold.toFixed(2)}`;
+    formulaEl.textContent = `${weightsFormulaText()}  ·  صنف أ إذا y ≥ 0`;
   }
 
   const scatterEl = document.getElementById("chart-scatter");
   if (scatterEl && samples.length >= 2) {
     if (scatterEl.querySelector(".info-box, .warn-box")) scatterEl.innerHTML = "";
     if (!state.plotAxes) state.plotAxes = fixedFeatureAxes(samples);
-    const chart = featureScatterWithBoundary(samples, state.wVals, state.threshold, state.plotAxes);
+    const chart = featureScatterWithBoundary(samples, state.wVals, state.bias, state.plotAxes);
     chart.layout.datarevision = Date.now();
     renderPlotInBox("chart-scatter", chart.data, chart.layout);
   }
@@ -392,9 +589,9 @@ function updateWeightsUI() {
     } else {
       tableEl.innerHTML = `
         <table class="data-table">
-          <tr><th>الصورة</th><th>سطوع</th><th>شكل</th><th>تفاصيل</th><th>التصنيف</th><th>التوقع</th></tr>
+          <tr><th>الصورة</th><th>سطوع</th><th>شكل</th><th>تفاصيل</th><th>التصنيف</th><th>y</th></tr>
           ${samples.map((s) => {
-            const score2d = scoreSample2D(s);
+            const yVal = scoreSample2D(s);
             const pred = predictSample(s);
             const ok = pred === s.label;
             return `<tr class="${ok ? "" : "current"}">
@@ -403,7 +600,7 @@ function updateWeightsUI() {
               <td>${s.features.aspect}</td>
               <td>${s.features.edges}</td>
               <td>${s.label ? "صنف أ" : "صنف ب"}</td>
-              <td>${ok ? "✓" : "✗"} (${score2d.toFixed(2)})</td>
+              <td>${ok ? "✓" : "✗"} (${yVal.toFixed(2)})</td>
             </tr>`;
           }).join("")}
         </table>`;
@@ -419,8 +616,8 @@ function bindWeightSliders() {
       scheduleWeightsUpdate();
     });
   });
-  document.getElementById("threshold").addEventListener("input", (e) => {
-    state.threshold = parseFloat(e.target.value);
+  document.getElementById("img-bias").addEventListener("input", (e) => {
+    state.bias = parseFloat(e.target.value);
     updateSliderOutputs();
     scheduleWeightsUpdate();
   });
@@ -429,7 +626,7 @@ function bindWeightSliders() {
 function renderWeights() {
   document.getElementById("demo-title").textContent = "ضبط الأوزان — اجعل الخط يفصل";
   document.getElementById("demo-desc").textContent =
-    "🔵 أزرق = صنف أ · 🟠 برتقالي = صنف ب — إذا فصل الخط بين النقطتين، التصنيف صحيح!";
+    "y = w₁·سطوع + w₂·شكل + b — صنف أ إذا y ≥ 0. 🔵 أزرق = صنف أ · 🟠 برتقالي = صنف ب";
 
   const samples = readySamples();
   const [w1, w2] = state.wVals;
@@ -451,7 +648,7 @@ function renderWeights() {
         <h3>الأوزان</h3>
         ${sliderRow("w1", "w₁ سطوع", -1, 1, 0.01, w1)}
         ${sliderRow("w2", "w₂ شكل", -1, 1, 0.01, w2)}
-        ${sliderRow("threshold", "عتبة", -0.5, 1.5, 0.01, state.threshold)}
+        ${sliderRow("img-bias", "b (الانحياز)", -1.5, 1.5, 0.01, state.bias)}
       </div>
       <div class="formula" style="direction:rtl" id="formula-text"></div>
       <div class="metrics" id="metrics"></div>
@@ -463,7 +660,7 @@ function renderWeights() {
 
   if (samples.length < 2) {
     const scatter = document.getElementById("chart-scatter");
-    if (scatter) scatter.innerHTML = infoHtml("ارفع صورتين في العرض ١ أولاً.", "warn");
+    if (scatter) scatter.innerHTML = infoHtml("ارفع صورتين في التجربة ٢ (رفع واستخراج) أولاً.", "warn");
   }
 
   updateWeightsUI();
@@ -473,15 +670,47 @@ function renderWeights() {
 function switchDemo(demo) {
   if (state.animTimer) clearInterval(state.animTimer);
   state.demo = demo;
-  document.querySelectorAll(".nav-tabs button").forEach((btn) => {
+  document.querySelectorAll(".nav-tabs button[data-demo]").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.demo === demo);
   });
-  if (demo === "pixels") renderPixels();
+  const sub = document.getElementById("images-sub-nav");
+  if (sub) sub.remove();
+  if (demo === "lineplay") renderLinePlay();
+  else if (demo === "images") renderImagesFlow();
+}
+
+function renderImagesFlow() {
+  showImagesSubNav();
+  if (state.imagesStep === "pixels") renderPixels();
   else renderWeights();
 }
 
-document.querySelectorAll(".nav-tabs button").forEach((btn) => {
+function showImagesSubNav() {
+  if (document.getElementById("images-sub-nav")) {
+    document.querySelectorAll("#images-sub-nav button").forEach((b) => {
+      b.classList.toggle("active", b.dataset.step === state.imagesStep);
+    });
+    return;
+  }
+  const header = document.getElementById("demo-header");
+  header.insertAdjacentHTML(
+    "beforeend",
+    `<div class="sub-tabs" id="images-sub-nav">
+      <button type="button" data-step="pixels">أ — رفع واستخراج</button>
+      <button type="button" data-step="weights">ب — ضبط الأوزان</button>
+    </div>`
+  );
+  document.getElementById("images-sub-nav").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-step]");
+    if (!btn) return;
+    state.imagesStep = btn.dataset.step;
+    renderImagesFlow();
+  });
+  showImagesSubNav();
+}
+
+document.querySelectorAll(".nav-tabs button[data-demo]").forEach((btn) => {
   btn.addEventListener("click", () => switchDemo(btn.dataset.demo));
 });
 
-switchDemo("pixels");
+switchDemo("lineplay");

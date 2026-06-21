@@ -83,7 +83,7 @@ function boundaryLineEnds(w1, w2, rhs, xLo, xHi, yLo, yHi) {
   return bestDist > 1e-10 ? best : null;
 }
 
-function regionCentroid(w1, w2, rhs, xMin, xMax, yMin, yMax, positive) {
+function regionCentroid(w1, w2, bias, xMin, xMax, yMin, yMax, positive) {
   let sx = 0;
   let sy = 0;
   let n = 0;
@@ -92,7 +92,7 @@ function regionCentroid(w1, w2, rhs, xMin, xMax, yMin, yMax, positive) {
     for (let i = 0; i <= steps; i++) {
       const x = xMin + ((xMax - xMin) * i) / steps;
       const y = yMin + ((yMax - yMin) * j) / steps;
-      const side = w1 * x + w2 * y >= rhs;
+      const side = w1 * x + w2 * y + bias >= 0;
       if ((positive && side) || (!positive && !side)) {
         sx += x;
         sy += y;
@@ -103,11 +103,11 @@ function regionCentroid(w1, w2, rhs, xMin, xMax, yMin, yMax, positive) {
   return n ? [sx / n, sy / n] : null;
 }
 
-function decisionRegionHeatmap(w1, w2, threshold, xMin, xMax, yMin, yMax) {
+function decisionRegionHeatmap(w1, w2, bias, xMin, xMax, yMin, yMax) {
   const n = 48;
   const xs = Array.from({ length: n }, (_, i) => xMin + ((xMax - xMin) * i) / (n - 1));
   const ys = Array.from({ length: n }, (_, j) => yMin + ((yMax - yMin) * j) / (n - 1));
-  const z = ys.map((y) => xs.map((x) => (w1 * x + w2 * y >= threshold ? 1 : 0)));
+  const z = ys.map((y) => xs.map((x) => (w1 * x + w2 * y + bias >= 0 ? 1 : 0)));
 
   return {
     type: "heatmap",
@@ -128,7 +128,7 @@ function decisionRegionHeatmap(w1, w2, threshold, xMin, xMax, yMin, yMax) {
   };
 }
 
-export function featureScatterWithBoundary(samples, weights, threshold, fixedAxes = null) {
+export function featureScatterWithBoundary(samples, weights, bias, fixedAxes = null) {
   const [w1, w2] = weights;
   const cats = samples.filter((s) => s.label === 1);
   const others = samples.filter((s) => s.label === 0);
@@ -137,11 +137,11 @@ export function featureScatterWithBoundary(samples, weights, threshold, fixedAxe
   const axes = fixedAxes || fixedFeatureAxes(samples);
   const [xMin, xMax] = axes.x;
   const [yMin, yMax] = axes.y;
-  const rhs = threshold;
+  const rhs = -bias;
   const posName = cats[0]?.labelName || "صنف أ";
   const negName = others[0]?.labelName || "صنف ب";
 
-  traces.push(decisionRegionHeatmap(w1, w2, threshold, xMin, xMax, yMin, yMax));
+  traces.push(decisionRegionHeatmap(w1, w2, bias, xMin, xMax, yMin, yMax));
 
   if (cats.length) {
     traces.push({
@@ -178,7 +178,7 @@ export function featureScatterWithBoundary(samples, weights, threshold, fixedAxe
         x: [ends[0][0], ends[1][0]],
         y: [ends[0][1], ends[1][1]],
         mode: "lines",
-        name: "خط الفصل",
+        name: "y = 0",
         line: { color: "#E74C3C", width: 4, dash: "dash" },
         hoverinfo: "skip",
         cliponaxis: true,
@@ -187,8 +187,8 @@ export function featureScatterWithBoundary(samples, weights, threshold, fixedAxe
   }
 
   const wrongPts = samples.filter((s) => {
-    const score = w1 * s.features.brightness + w2 * s.features.aspect;
-    const pred = score >= threshold ? 1 : 0;
+    const yVal = w1 * s.features.brightness + w2 * s.features.aspect + bias;
+    const pred = yVal >= 0 ? 1 : 0;
     return pred !== s.label;
   });
   if (wrongPts.length) {
@@ -213,8 +213,8 @@ export function featureScatterWithBoundary(samples, weights, threshold, fixedAxe
     ? `ميل الخط ≈ ${(-w1 / w2).toFixed(1)}`
     : "ميل عمودي";
 
-  const posCenter = regionCentroid(w1, w2, rhs, xMin, xMax, yMin, yMax, true);
-  const negCenter = regionCentroid(w1, w2, rhs, xMin, xMax, yMin, yMax, false);
+  const posCenter = regionCentroid(w1, w2, bias, xMin, xMax, yMin, yMax, true);
+  const negCenter = regionCentroid(w1, w2, bias, xMin, xMax, yMin, yMax, false);
   const annotations = [];
   const labelPadX = (xMax - xMin) * 0.1;
   const labelPadY = (yMax - yMin) * 0.1;

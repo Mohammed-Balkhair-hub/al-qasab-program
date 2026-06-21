@@ -28,8 +28,8 @@ https://mohammed-balkhair-hub.github.io/al-qasab-program/
 
 | Tab | What students see |
 |-----|-------------------|
-| **1 — Pixels & features** | Upload two labeled images → 32×32 pixel grid → animated feature extraction |
-| **2 — Weight tuning** | 2D scatter plot with decision boundary — adjust weights until classes separate |
+| **1 — Line & weights** | Click to add points on x/y axes — add features x₁, x₂… with matching weights — orange decision line turns points green when touched |
+| **2 — Images & features** | Upload two labeled images → 32×32 pixel grid → feature extraction → manual weight tuning on scatter plot |
 
 ### Day 3 demos — *Built on Our Images*
 
