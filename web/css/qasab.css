@@ -721,12 +721,15 @@ select {
   cursor: pointer;
 }
 
+html.hub-page,
 body.hub-page {
   height: auto;
   min-height: 100vh;
+  overflow-x: hidden;
   overflow-y: auto;
   position: relative;
   background: #f6fafd;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Hub index page */
@@ -1046,6 +1049,7 @@ body.hub-page {
 
 @media (max-width: 720px) {
   .hub-shell {
+    min-height: auto;
     padding: 1.5rem 1rem 2rem;
     justify-content: flex-start;
   }
