@@ -20,9 +20,10 @@ https://mohammed-balkhair-hub.github.io/al-qasab-program/
 |------|-------|--------------------------|-----------|
 | 🏠 **Hub** | Program home — pick a day | [Open hub](https://mohammed-balkhair-hub.github.io/al-qasab-program/) | [`web/index.html`](web/index.html) |
 | 📐 **Day 1** | Pattern Engineering | [Open Day 1](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-1.html) | [`web/day-1.html`](web/day-1.html) |
+| 🔄 **Day 2** | Learning Cycle | [Open Day 2](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-2.html) | [`web/day-2.html`](web/day-2.html) |
 | 🧠 **Day 3** | Built on Our Images | [Open Day 3](https://mohammed-balkhair-hub.github.io/al-qasab-program/day-3.html) | [`web/day-3.html`](web/day-3.html) |
 
-> **Web days 1 and 3 only.** Day 2 and Day 4 have slide decks but no interactive pages in this release.
+> **Web days 1, 2, and 3.** Day 4 has slide decks but no interactive page.
 
 ### Day 1 demos — *Pattern Engineering*
 
@@ -30,6 +31,13 @@ https://mohammed-balkhair-hub.github.io/al-qasab-program/
 |-----|-------------------|
 | **1 — Line & weights** | Click to add points on x/y axes — add features x₁, x₂… with matching weights — orange decision line turns points green when touched |
 | **2 — Images & features** | Upload two labeled images → 32×32 pixel grid → feature extraction → manual weight tuning on scatter plot |
+
+### Day 2 demos — *Learning Cycle*
+
+| Tab | What students see |
+|-----|-------------------|
+| **1 — Error & step** | Add points like Day 1 — red dotted error lines to the model line — average loss + per-weight contribution — learning rate — **Next** updates w and b (no manual w/b sliders) |
+| **2 — Training loop** | Same plot — **Train** runs the slow guess → measure → adjust → repeat cycle with loss curve and phase indicator |
 
 ### Day 3 demos — *Built on Our Images*
 
@@ -47,7 +55,7 @@ Slide decks (PDF + PPTX) live beside the web app in `Day-N/` folders.
 | Day | Topic (Arabic) | Interactive web | Slides |
 |-----|----------------|-----------------|--------|
 | **1** | Pattern Engineering (هندسة الأنماط) | ✅ 2 demos | [`Day-1/`](Day-1/) |
-| **2** | Learning Cycle (دائرة التعلم) | — | [`Day-2/`](Day-2/) |
+| **2** | Learning Cycle (دائرة التعلم) | ✅ 2 demos | [`Day-2/`](Day-2/) |
 | **3** | Built on Our Images (مبني على صورتنا) | ✅ 2 demos | [`Day-3/`](Day-3/) |
 | **4** | — | — slides only, no web | (future) |
 

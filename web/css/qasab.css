@@ -839,7 +839,7 @@ body.hub-page {
 
 .hub-days {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.25rem;
 }
 
@@ -1686,4 +1686,176 @@ input[type="text"] {
 .step-dots .dot:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Day 2 — learning loop */
+.learn-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.learn-plot-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+@media (min-width: 720px) {
+  .learn-plot-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.loss-panel {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.85rem;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 720px) {
+  .loss-panel {
+    width: 11.5rem;
+    flex: 0 0 11.5rem;
+  }
+}
+
+.loss-panel-head {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.avg-loss-val {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  line-height: 1.1;
+  margin-bottom: 0.65rem;
+}
+
+.loss-panel-sub {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.45rem;
+}
+
+.contrib-row {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr 2.5rem;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+}
+
+.contrib-label {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.contrib-bar-wrap {
+  height: 0.45rem;
+  background: var(--surface);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.contrib-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #e74c3c 0%, var(--accent) 100%);
+  border-radius: 999px;
+  min-width: 2px;
+  transition: width 0.25s ease;
+}
+
+.contrib-val {
+  text-align: left;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.weights-readout {
+  margin-top: 0.65rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.frozen-badge {
+  margin-top: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.5rem;
+}
+
+.learn-main-chart {
+  flex: 1;
+  min-height: 240px;
+  min-width: 0;
+  width: 100%;
+}
+
+.loss-curve-box {
+  flex: 0 0 160px;
+  width: 100%;
+  min-height: 140px;
+  max-height: 180px;
+}
+
+.loss-curve-box.hidden {
+  display: none;
+}
+
+.train-phases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+}
+
+.train-phase {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  opacity: 0.65;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.train-phase.active {
+  opacity: 1;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+}
+
+.train-btns {
+  margin-bottom: 0.35rem;
+}
+
+.day-card--2::before {
+  background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 100%);
 }

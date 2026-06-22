@@ -1,4 +1,4 @@
-/** Day 2 — examples, layer labels, edge topology */
+/** Day 3 — examples, layer labels, edge topology */
 
 import { GRID, computeFeatures } from "./image-utils.js";
 

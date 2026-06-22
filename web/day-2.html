@@ -3,27 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>اليوم ٣ — مبني على صورتنا | برنامج القصب</title>
+  <title>اليوم ٢ — دائرة التعلم | برنامج القصب</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/qasab.css" />
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 </head>
 <body>
   <div class="app">
     <nav class="nav">
       <a class="nav-back" href="index.html">← الرئيسية</a>
       <div class="brand-mark" aria-hidden="true"><span class="brand-mark-inner">Q</span></div>
-      <span class="nav-day">اليوم ٣</span>
-      <h1>مبني على صورتنا</h1>
+      <span class="nav-day">اليوم ٢</span>
+      <h1>دائرة التعلم</h1>
       <ul class="nav-tabs" id="nav-tabs">
-        <li><button type="button" class="active" data-demo="neuron">١ — الخلية الواحدة</button></li>
-        <li><button type="button" data-demo="network">٢ — الشبكة كاملة</button></li>
+        <li><button type="button" class="active" data-demo="step">١ — خطأ وخطوة</button></li>
+        <li><button type="button" data-demo="train">٢ — دورة التدريب</button></li>
       </ul>
     </nav>
     <div class="content">
-      <div class="header">
-        <h2 id="demo-title">الخلية العصبية — واحدة فقط</h2>
-        <p id="demo-desc">متى تستقبل؟ متى تضيء؟ متى تمرّر الإشارة؟</p>
+      <div class="header" id="demo-header">
+        <h2 id="demo-title">قياس الخطأ — خطوة واحدة</h2>
+        <p id="demo-desc">أضف نقاطاً — الخطوط الحمراء = الخطأ — اضغط «التالي» لتعديل الأوزان تلقائياً.</p>
       </div>
       <div class="main">
         <div class="charts" id="charts-area"></div>
@@ -31,6 +32,6 @@
       </div>
     </div>
   </div>
-  <script type="module" src="js/day3.js"></script>
+  <script type="module" src="js/day2.js"></script>
 </body>
 </html>
