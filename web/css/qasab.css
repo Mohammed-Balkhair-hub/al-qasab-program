@@ -977,6 +977,73 @@ body.hub-page {
   font-size: 1rem;
 }
 
+.day-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.day-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  text-align: center;
+  transition: box-shadow 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.day-card-btn--primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--white);
+  box-shadow: 0 4px 20px rgba(27, 108, 168, 0.22);
+}
+
+.day-card-btn--primary::after {
+  content: "←";
+  font-size: 1rem;
+}
+
+.day-card-btn--dl {
+  background: linear-gradient(135deg, var(--accent) 0%, #e8740f 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-accent);
+}
+
+.day-card-btn--dl::before {
+  content: "⬇";
+  font-size: 0.85rem;
+}
+
+.day-card-btn--dl-off {
+  background: #e8ecf0;
+  color: #9aa8b5;
+  border: 1px solid #d5dde5;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.day-card-btn--dl-off::before {
+  content: "⬇";
+  font-size: 0.85rem;
+  opacity: 0.55;
+}
+
+.day-card:hover .day-card-btn--primary {
+  box-shadow: 0 6px 22px rgba(27, 108, 168, 0.32);
+}
+
+.day-card:hover .day-card-btn--dl {
+  box-shadow: 0 6px 22px rgba(245, 130, 32, 0.38);
+}
+
 @media (max-width: 720px) {
   .hub-shell {
     padding: 1.5rem 1rem 2rem;
