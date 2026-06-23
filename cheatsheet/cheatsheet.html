@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>برنامج القصب التأهيلي في الذكاء الاصطناعي — ورقة المراجعة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --header-h: clamp(2rem, 4.8dvh, 3rem);
+            --page-pad: clamp(0.25rem, 0.8dvh, 0.6rem);
+            --col-gap: clamp(0.15rem, 0.35dvh, 0.4rem);
+            --card-pad: clamp(0.2rem, 0.55dvh, 0.45rem);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: white;
+            color: black;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .sheet {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100dvh;
+            overflow: hidden;
+        }
+
+        .header-banner {
+            flex: 0 0 var(--header-h);
+            background-color: #1E3A5F;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(0.75rem, 1.8dvh, 1.15rem);
+            font-weight: bold;
+            border-bottom: 2px solid #F5851F;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .main-container {
+            flex: 1;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: var(--page-pad);
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            padding: 0 clamp(0.15rem, 0.4vw, 0.35rem);
+            border-left: 1px solid #d0d0d0;
+            overflow: hidden;
+        }
+
+        .column:last-child {
+            border-left: none;
+        }
+
+        .col-header {
+            flex: 0 0 auto;
+            background-color: #1E3A5F;
+            color: white;
+            font-size: calc(var(--font-factor, 1.15) * 1.35dvh);
+            font-weight: bold;
+            text-align: center;
+            padding: clamp(0.15rem, 0.45dvh, 0.35rem) 0.25rem;
+            margin-bottom: var(--col-gap);
+            border-radius: 2px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .cards {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--col-gap);
+            overflow: hidden;
+        }
+
+        .card {
+            flex: 1 1 0;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: #F7F8FA;
+            border: 1px solid #E0E0E0;
+            border-radius: 3px;
+            padding: var(--card-pad);
+            overflow: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .card-title {
+            flex: 0 0 auto;
+            color: #F5851F;
+            font-size: calc(var(--font-factor, 1.15) * 1.28dvh);
+            font-weight: bold;
+            margin: 0 0 clamp(0.1rem, 0.25dvh, 0.2rem);
+            line-height: 1.2;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .card-body {
+            flex: 1;
+            min-height: 0;
+            font-size: calc(var(--font-factor, 1.15) * 1.1dvh);
+            margin: 0;
+            line-height: 1.28;
+            overflow: hidden;
+        }
+
+        .bold-text {
+            font-weight: bold;
+        }
+
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        @media print {
+            html,
+            body {
+                width: 297mm;
+                height: 210mm;
+                overflow: hidden;
+            }
+
+            .sheet {
+                width: 297mm;
+                height: 210mm;
+            }
+
+            .header-banner,
+            .col-header {
+                background-color: #1E3A5F !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .card {
+                background-color: #F7F8FA !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                page-break-inside: avoid;
+            }
+
+            .card-title {
+                color: #F5851F !important;
+            }
+
+            .main-container,
+            .column,
+            .cards {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sheet">
+    <div class="header-banner">
+        برنامج القصب التأهيلي في الذكاء الاصطناعي — ورقة المراجعة
+    </div>
+
+    <div class="main-container">
+        <div class="column">
+            <div class="col-header">١ · هندسة الأنماط</div>
+            <div class="cards">
+            <div class="card">
+                <h3 class="card-title">انهيار قواعد If-Else</h3>
+                <p class="card-body">
+                    الكود التقليدي يرى الأرقام — لكنه يفشل لأن:<br>
+                    • قيم البكسل تتغير بالكامل مع كل تغيير طفيف في الإضاءة<br>
+                    • المواقع الثابتة للعناصر تتحرك مع كل زاوية تصوير<br>
+                    • عدد القواعد اللازمة لا نهائي — لا يمكن حصره يدوياً<br>
+                    "لا يمكنك كتابة قواعد برمجية لشيء لا يمكنك وصفه بالكامل."
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">من البكسلات إلى الخصائص إلى القرار</h3>
+                <p class="card-body">
+                    ١- البيانات الخام (Raw Data): ملايين الأرقام الصامتة التي تمثل قيم البكسلات والألوان في الصورة.<br>
+                    ٢- الخصائص المستخرجة (Features): تحليل البكسلات إلى قياسات هندسية محددة ومفهومة للآلة.<br>
+                    ٣- القرار النهائي (Decision): اتخاذ قرار ذكي وتصنيف الصورة بناءً على الأرقام المستخرجة.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">الخاصية (Feature)</h3>
+                <p class="card-body">
+                    رقم يصف شيئاً قابلاً للقياس في المدخلات.<br>
+                    أمثلة:<br>
+                    • نسبة الطول إلى العرض (Aspect Ratio)<br>
+                    • عدد الزوايا الحادة (Number of Corners)<br>
+                    • درجة التماثل (Symmetry Score)<br>
+                    • وجود الذيل: نعم(1) أو لا(0) (Presence of Tail)
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">الوزن (Weight)</h3>
+                <p class="card-body">
+                    رقم نحدده لنقول للحاسوب كم تهمنا هذه الخاصية.<br>
+                    كلما كبر الرقم، زاد تأثير الخاصية على القرار.<br>
+                    النتيجة = (الخاصية1 × الوزن1) + (الخاصية2 × الوزن2)
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">فضاء الخصائص والتجميع</h3>
+                <p class="card-body">
+                    عند استخراج الخصائص الرقمية، يتحول كل كائن إلى نقطة هندسية في الفضاء.<br>
+                    بسبب التشابه الطبيعي، تتجمع النقاط المتشابهة معاً لتشكّل تكتلاً (Cluster).
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">حد القرار (Decision Boundary)</h3>
+                <p class="card-body">
+                    يبحث النموذج عن خط يفصل بدقة بين مجموعات النقاط.<br>
+                    "الخط هو جوهر القرار!"<br>
+                    ضبط موقع واتجاه هذا الخط بدقة هو ما تُسمى عملية "التدريب".
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">أزمة التوسع (Scaling Crisis)</h3>
+                <p class="card-body">
+                    صورة حقيقية تحتوي على ملايين الخصائص → تحتاج ملايين الأوزان.<br>
+                    هذا مستحيل تماماً على أي مهندس بشري القيام به يدوياً.<br>
+                    → يجب أن تتعلم الآلة كيف تفعل ذلك تلقائياً.
+                </p>
+            </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="col-header">٢ · دائرة التعلم</div>
+            <div class="cards">
+            <div class="card">
+                <h3 class="card-title">دائرة التعلم (The Learning Loop)</h3>
+                <p class="card-body">
+                    الآلة تعدّل أوزانها تلقائياً عبر ٤ مراحل:<br>
+                    ١. التخمين العشوائي: أوزان عشوائية في البداية — خطأ فادح!<br>
+                    ٢. قياس الخطأ: حساب نسبة الخطأ الدقيقة (Loss)<br>
+                    ٣. التعديل التلقائي: تعديل قيم الأوزان في الاتجاه الذي يقلل الخطأ<br>
+                    ٤. التكرار المستمر: ملايين المرات حتى تصل لأقل نسبة خطأ ممكنة
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">الخسارة (Loss)</h3>
+                <p class="card-body">
+                    الخسارة (Loss) = توقع الآلة − الإجابة الصحيحة<br>
+                    • توقع الآلة (Guess): الرقم الذي خمّنته الآلة بناءً على أوزانها الحالية<br>
+                    • الإجابة الصحيحة (Correct Answer): القيمة الصحيحة الحقيقية<br>
+                    المهمة الوحيدة للآلة: جعل قيمة الخسارة أصغر ما يمكن.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">منحنى الخسارة (Loss Curve) و Plateau</h3>
+                <p class="card-body">
+                    Loss Curve: رسم بياني يوضح كيف تنخفض قيمة الخسارة مع زيادة جولات التدريب.<br>
+                    Plateau (مرحلة الاستقرار): المنحنى يبدأ مرتفعاً جداً، ثم ينحدر بسرعة، حتى يستقر عند قيمة منخفضة قريبة من الصفر. هنا نقول إن النموذج قد تم تدريبه بنجاح!
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Garbage In, Garbage Out</h3>
+                <p class="card-body">
+                    "إذا قمت بتغذية الآلة ببيانات مشوشة أو خاطئة، فستظل قيمة الخسارة مرتفعة ولن تصيب الهدف أبداً."
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">التعديل التلقائي — البوصلة الذكية</h3>
+                <p class="card-body">
+                    الخسارة تعبّر عن المسافة: كم الآلة بعيدة عن الحل الصحيح.<br>
+                    قانون التعديل (Adjustment Rule) يعبّر عن الاتجاه: أين تتحرك الأوزان.<br>
+                    معاً يُشكّلان بوصلة ذكية تقود الآلة خطوةً بخطوة نحو الهدف.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">معدل التعلم (Learning Rate)</h3>
+                <p class="card-body">
+                    Too Large → Overshoot — تجاوز الهدف<br>
+                    Too Small → Too Slow — بطيء جداً<br>
+                    Just Right → Convergence — التقارب ✓
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Flat vs Deep</h3>
+                <p class="card-body">
+                    Flat Structure: طبقة واحدة — أنماط بسيطة<br>
+                    Deep Structure: طبقات متعددة (1، 2، 3...) — أنماط معقدة<br>
+                    هذا هو المفهوم الجوهري لـ Deep Learning
+                </p>
+            </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="col-header">٣ · مبني على صورتنا</div>
+            <div class="cards">
+            <div class="card">
+                <h3 class="card-title">Neurons → Nodes | Synapses → Weights</h3>
+                <p class="card-body">
+                    الخلية العصبية البيولوجية ألهمت الشبكة الاصطناعية.<br>
+                    نفس الفكرة. مادة مختلفة.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">الخلية العصبية البيولوجية</h3>
+                <p class="card-body">
+                    • Dendrites (التشعبات): تستقبل الإشارات الواردة<br>
+                    • Soma (جسم الخلية): يجمع الإشارات ويعالجها<br>
+                    • Axon (المحور العصبي): يُرسل الإشارة للخلايا التالية<br>
+                    • Synapse (نقطة الاشتباك): نقطة الاتصال بين الخلايا<br>
+                    إذا تجاوزت الإشارات الواردة عتبة معينة → تُطلق إشارة.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">الأوزان في الشبكة العصبية</h3>
+                <p class="card-body">
+                    استُخدم كثيراً → أقوى | نادراً ما يُستخدم → أضعف<br>
+                    دماغ الإنسان: 86 مليار خلية عصبية<br>
+                    GPT-3: 175 مليار parameter
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">التسلسل الهرمي للطبقات</h3>
+                <p class="card-body">
+                    Layer 1 — Pixels: بيكسلات خام<br>
+                    Layer 2 — Edges: حواف<br>
+                    Layer 3 — Features: معالم (أنف، عينان...)<br>
+                    Output — Identity: هوية الوجه<br>
+                    يشبه مناطق الدماغ البصري: V1 · V2 · V4 · IT
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Shallow vs Deep Network</h3>
+                <p class="card-body">
+                    Shallow: 2 طبقات — أنماط بسيطة<br>
+                    Deep: 10+ طبقات — أنماط معقدة — "Deep Learning"
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">أين تنكسر الاستعارة؟</h3>
+                <p class="card-body">
+                    الدماغ يُعيد التشكّل دائماً ↔ الشبكة: لا تحدث بعد التدريب<br>
+                    الدماغ يتعلم من مثال واحد ↔ الشبكة: تحتاج ملايين<br>
+                    الدماغ يشعر ويتساءل ↔ الشبكة: لا يوجد عالم داخلي
+                </p>
+            </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="col-header">٤ · مهندس الأوامر</div>
+            <div class="cards">
+            <div class="card">
+                <h3 class="card-title">ما هو الأمر (Prompt)؟</h3>
+                <p class="card-body">
+                    الأمر هو الجملة التي نكتبها للذكاء الاصطناعي لنطلب منه شيئاً.<br>
+                    الذكاء الاصطناعي لا يقرأ نيتك — يستجيب فقط لما هو مكتوب أمامه فعلياً.<br>
+                    كل ما لم تذكره، هو ببساطة لا يعرفه.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">لماذا يحصل البعض على نتائج أفضل؟</h3>
+                <p class="card-body">
+                    • هدف غير واضح: الطالب نفسه لا يعرف ماذا يريد بالضبط<br>
+                    • غياب السياق: معلومات مهمة افترضها "معروفة" تلقائياً<br>
+                    • بدون قيود: لم يذكر الوقت أو المستوى أو الطول<br>
+                    • شكل غير محدد: طلب "معلومات" بدل جدول أو نقاط
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">إطار RCTF</h3>
+                <p class="card-body">
+                    R — Role (الدور): امنح الذكاء الاصطناعي هوية محددة قبل أن تطلب منه أي شيء<br>
+                    C — Context (السياق): المعلومات التي لو لم تذكرها، سيتخيلها من تلقاء نفسه<br>
+                    T — Task (المهمة): الفعل الذي تريده — كلما كان أكثر تحديداً، كان الناتج أكثر دقة<br>
+                    F — Format (الشكل): بدونه، الذكاء الاصطناعي يختار شكل المخرج بنفسه
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">أمثلة الشكل (Format)</h3>
+                <p class="card-body">
+                    • نقاط مرقمة — مثالي للخطوات والتعليمات<br>
+                    • جدول — مثالي للمقارنات والبيانات<br>
+                    • فقرة نثرية — مثالي للشرح والمقالات<br>
+                    • وصف بصري — مثالي لأوامر توليد الصور
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">سلسلة التفكير (Chain of Thought)</h3>
+                <p class="card-body">
+                    "فكّر خطوة بخطوة، ثم أخبرني بـ..."<br>
+                    لماذا يفيد؟<br>
+                    ١. يكشف الخطوات المنطقية ويساعدك على التدقيق<br>
+                    ٢. يقلل الأخطاء في المسائل المعقدة<br>
+                    ٣. يجعل النتيجة أسهل للفهم والمراجعة
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">القيود السلبية (Negative Constraints)</h3>
+                <p class="card-body">
+                    "أحياناً تحديد ما لا تريده أسهل وأكثر فاعلية."<br>
+                    • لا تستخدم مصطلحات تقنية معقدة<br>
+                    • لا تتجاوز ١٠٠ كلمة<br>
+                    • لا تستخدم جداول<br>
+                    • لا تقدم رأيك الشخصي<br>
+                    • لا تكرر المعلومة أكثر من مرة
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">الوكيل الذكي — الفكرة الكبرى</h3>
+                <p class="card-body">
+                    محرك البحث: روابط — أنت تقرر | الدردشة: إجابة مباشرة | الوكيل: ينفّذ خطوات لتحقيق هدف كامل<br>
+                    "جودة الذكاء الاصطناعي تعكس جودة سؤالك — لا يقرأ أفكارك، يستجيب فقط لما تكتبه."
+                </p>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+  const root = document.documentElement;
+
+  function cardsFit() {
+    return [...document.querySelectorAll(".card-body")].every(
+      (el) => el.scrollHeight <= el.clientHeight + 1
+    );
+  }
+
+  function fitToScreen() {
+    let factor = 1.28;
+    root.style.setProperty("--font-factor", String(factor));
+
+    while (!cardsFit() && factor > 0.82) {
+      factor -= 0.02;
+      root.style.setProperty("--font-factor", String(factor));
+    }
+  }
+
+  window.addEventListener("load", fitToScreen);
+  window.addEventListener("resize", fitToScreen);
+})();
+</script>
+
+</body>
+</html>
